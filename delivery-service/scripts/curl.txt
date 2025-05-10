@@ -1,0 +1,34 @@
+curl -X POST http://localhost:8080/api/v1/shippers/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "anh1@kos.com",
+    "password": "password1",
+    "name": "Anh Một",
+    "gender": "male",
+    "phone": "100000001",
+    "vehicleType": "bike",
+    "vehiclePlate": "plate-100001"
+}'
+
+curl http://localhost:8080/api/v1/shippers/
+
+curl http://localhost:8080/api/v1/shippers/2
+
+curl -X POST http://localhost:8080/api/v1/deliveries/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "orderId": 103,
+    "restaurantAddress": "1 Nguyễn Chí Thanh, Đống Đa, Hà Nội",
+    "shippingAddress": "72 Trần Đại Nghĩa, Bách Khoa, Hai Bà Trưng, Hà Nội"
+}'
+
+curl -X PUT http://localhost:8080/api/v1/deliveries/1/status \
+   -H "Content-Type: application/json" \
+   -d '{"status":"completed"}'
+
+curl http://localhost:8080/api/v1/deliveries/shipper/2   
+
+curl http://localhost:8080/api/v1/deliveries/order/103  
+
+
+
