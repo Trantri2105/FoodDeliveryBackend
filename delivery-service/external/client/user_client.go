@@ -36,7 +36,7 @@ func (c *UserClient) Register(ctx context.Context, req *RegisterUserRequest) (*R
 	if baseURL == "" {
 		return nil, fmt.Errorf("USER_SERVICE_URL environment variable is not set")
 	}
-	requestURL := baseURL + "/register"
+	requestURL := baseURL + "/auth/register"
 
 	req.Role = "shipper"
 

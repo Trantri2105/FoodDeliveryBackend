@@ -1,6 +1,6 @@
 services:
   restaurant-service:
-    image: trantri10503/food-delivery-backend/restaurant-service:1.0.0
+    image: trantri10503/food-delivery-restaurant-service:1.0.0
     networks:
       - food-delivery-network
     environment:
@@ -15,7 +15,7 @@ services:
         condition: service_healthy
 
   delivery-service:
-    image: trantri10503/food-delivery-backend/delivery-service:1.0.0
+    image: trantri10503/food-delivery-delivery-service:1.0.0
     networks:
       - food-delivery-network
     environment:
@@ -31,7 +31,7 @@ services:
         condition: service_healthy
 
   order-service:
-    image: trantri10503/food-delivery-backend/order-service:1.0.0
+    image: trantri10503/food-delivery-order-service:1.0.0
     networks:
       - food-delivery-network
     environment:
@@ -48,7 +48,7 @@ services:
         condition: service_healthy
 
   user-service:
-    image: trantri10503/food-delivery-backend/user-service:1.0.0
+    image: trantri10503/food-delivery-user-service:1.0.0
     networks:
       - food-delivery-network
     environment:
