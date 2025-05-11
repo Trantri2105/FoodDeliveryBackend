@@ -48,7 +48,7 @@ services:
         condition: service_healthy
 
   user-service:
-    image: trantri10503/food-delivery-user-service:1.0.1
+    image: trantri10503/food-delivery-user-service:1.0.2
     networks:
       - food-delivery-network
     environment:
