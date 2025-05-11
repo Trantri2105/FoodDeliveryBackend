@@ -16,11 +16,16 @@ type UserService interface {
 	GetUserById(ctx context.Context, userId int) (model.User, error)
 	UpdateUserById(ctx context.Context, user model.User) (model.User, error)
 	UpdatePasswordById(ctx context.Context, userId int, oldPassword, newPassword string) error
+	GetUserList(ctx context.Context, limit, offset int) ([]model.User, error)
 }
 
 type userService struct {
 	userRepo repository.UserRepository
 	jwtUtils jwt.Utils
+}
+
+func (u *userService) GetUserList(ctx context.Context, limit, offset int) ([]model.User, error) {
+	return u.userRepo.GetUserList(ctx, limit, offset)
 }
 
 func (u *userService) Register(ctx context.Context, user model.User) (model.User, error) {

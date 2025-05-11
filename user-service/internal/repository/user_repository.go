@@ -15,6 +15,7 @@ type UserRepository interface {
 	GetUserByEmail(ctx context.Context, email string) (model.User, error)
 	UpdateUserById(ctx context.Context, user model.User) (model.User, error)
 	CreateUser(ctx context.Context, user model.User) (model.User, error)
+	GetUserList(ctx context.Context, limit, offset int) ([]model.User, error)
 }
 
 type userRepository struct {
@@ -31,6 +32,27 @@ func (u *userRepository) CreateUser(ctx context.Context, user model.User) (model
 		return model.User{}, err
 	}
 	return insertedUser, nil
+}
+
+func (u *userRepository) GetUserList(ctx context.Context, limit, offset int) ([]model.User, error) {
+	query := `SELECT * FROM users ORDER BY user_id LIMIT $1 OFFSET $2`
+	rows, err := u.db.QueryxContext(ctx, query, limit, offset)
+	if err != nil {
+		log.Printf("User repository, get user list err: %v", err)
+		return nil, err
+	}
+	defer rows.Close()
+	var users []model.User
+	for rows.Next() {
+		var user model.User
+		err := rows.StructScan(&user)
+		if err != nil {
+			log.Printf("User repository, get user list err: %v", err)
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
 
 func (u *userRepository) GetUserById(ctx context.Context, userId int) (model.User, error) {

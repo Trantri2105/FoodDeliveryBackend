@@ -25,6 +25,38 @@ func NewUserHandler(userService service.UserService, middleware middleware.AuthM
 	userRoute.PATCH("/profile", middleware.ValidateAndExtractJwt(), h.updateProfile)
 	userRoute.PUT("/password", middleware.ValidateAndExtractJwt(), h.updatePassword)
 	userRoute.GET("/:id", middleware.ValidateAndExtractJwt(), h.getUserById)
+	userRoute.GET("", middleware.ValidateAndExtractJwt(), h.getUserList)
+}
+
+func (h *userHandler) getUserList(c *gin.Context) {
+	claims, _ := c.Get(middleware.JWTClaimsContextKey)
+	userClaims := claims.(jwt.MapClaims)
+	role := userClaims["role"].(string)
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	limit := c.DefaultQuery("limit", "10")
+	offset := c.DefaultQuery("offset", "0")
+	l, err := strconv.Atoi(limit)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "limit must be integer"})
+		return
+	}
+	o, err := strconv.Atoi(offset)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "offset must be integer"})
+		return
+	}
+	res, err := h.userService.GetUserList(c, l, o)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	for v, _ := range res {
+		res[v].Password = ""
+	}
+	c.JSON(http.StatusOK, res)
 }
 
 func (h *userHandler) getUserById(c *gin.Context) {
