@@ -26,6 +26,22 @@ func NewRestaurantHandler(restaurantService service.RestaurantService, middlewar
 	restaurant.GET("/menu", h.GetMenu)
 	restaurant.PATCH("/menu/item/:id", middleware.ValidateAndExtractJwt(), h.UpdateMenuItem)
 	restaurant.DELETE("/menu/item/:id", middleware.ValidateAndExtractJwt(), h.DeleteMenuItem)
+	restaurant.GET("/menu/item/:id", h.GetMenuItemById)
+}
+
+func (h *restaurantHandler) GetMenuItemById(c *gin.Context) {
+	id := c.Param("id")
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "order id must be integer"})
+		return
+	}
+	res, err := h.restaurantService.GetMenuItemById(c, i)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, res)
 }
 
 func (h *restaurantHandler) GetRestaurantInfo(c *gin.Context) {

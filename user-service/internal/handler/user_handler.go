@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"net/http"
+	"strconv"
 	"user-service/internal/model"
 	"user-service/internal/service"
 	"user-service/pkg/middleware"
@@ -23,6 +24,30 @@ func NewUserHandler(userService service.UserService, middleware middleware.AuthM
 	userRoute.GET("/profile", middleware.ValidateAndExtractJwt(), h.getProfile)
 	userRoute.PATCH("/profile", middleware.ValidateAndExtractJwt(), h.updateProfile)
 	userRoute.PUT("/password", middleware.ValidateAndExtractJwt(), h.updatePassword)
+	userRoute.GET("/:id", middleware.ValidateAndExtractJwt(), h.getUserById)
+}
+
+func (h *userHandler) getUserById(c *gin.Context) {
+	claims, _ := c.Get(middleware.JWTClaimsContextKey)
+	userClaims := claims.(jwt.MapClaims)
+	role := userClaims["role"].(string)
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	id := c.Param("id")
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "order id must be integer"})
+		return
+	}
+	res, err := h.userService.GetUserById(c, i)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	res.Password = ""
+	c.JSON(http.StatusOK, res)
 }
 
 func (h *userHandler) register(c *gin.Context) {

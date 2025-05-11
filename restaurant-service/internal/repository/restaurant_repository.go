@@ -17,10 +17,23 @@ type RestaurantRepository interface {
 	GetMenu(ctx context.Context) ([]model.MenuItem, error)
 	UpdateMenuItem(ctx context.Context, menuItem model.MenuItem) (model.MenuItem, error)
 	DeleteMenuItem(ctx context.Context, id int) error
+	GetMenuItemById(ctx context.Context, id int) (model.MenuItem, error)
 }
 
 type restaurantRepository struct {
 	db *sqlx.DB
+}
+
+func (r *restaurantRepository) GetMenuItemById(ctx context.Context, id int) (model.MenuItem, error) {
+	query := `SELECT id, name, description, price, is_available, image_url FROM menu_items WHERE id = $1`
+	row := r.db.QueryRowxContext(ctx, query, id)
+	var menuItem model.MenuItem
+	err := row.StructScan(&menuItem)
+	if err != nil {
+		log.Printf("Restaurant repo, get menu item by id err: %v\n", err)
+		return menuItem, err
+	}
+	return menuItem, nil
 }
 
 func (r *restaurantRepository) GetRestaurantInfo(ctx context.Context) (model.Restaurant, error) {

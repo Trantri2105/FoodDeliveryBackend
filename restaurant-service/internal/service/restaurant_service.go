@@ -13,10 +13,15 @@ type RestaurantService interface {
 	GetMenu(ctx context.Context) ([]model.MenuItem, error)
 	UpdateMenuItem(ctx context.Context, menuItem model.MenuItem) (model.MenuItem, error)
 	DeleteMenuItem(ctx context.Context, id int) error
+	GetMenuItemById(ctx context.Context, id int) (model.MenuItem, error)
 }
 
 type restaurantService struct {
 	restaurantRepo repository.RestaurantRepository
+}
+
+func (r *restaurantService) GetMenuItemById(ctx context.Context, id int) (model.MenuItem, error) {
+	return r.restaurantRepo.GetMenuItemById(ctx, id)
 }
 
 func (r *restaurantService) GetRestaurantInfo(ctx context.Context) (model.Restaurant, error) {

@@ -112,7 +112,7 @@ CREATE TABLE deliveries (
     from_coords JSONB NOT NULL,
     to_coords JSONB NOT NULL,
     geometry_line TEXT NOT NULL,
-    status VARCHAR(32) CHECK (status IN ('pending', 'assigned', 'delivering', 'completed', 'canceled')) NOT NULL,
+    status VARCHAR(32) CHECK (status IN ('pending', 'assigned', 'delivering', 'delivered', 'canceled')) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
