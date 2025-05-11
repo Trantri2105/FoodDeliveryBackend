@@ -1,6 +1,6 @@
 services:
   restaurant-service:
-    image: trantri10503/food-delivery-restaurant-service:1.0.0
+    image: trantri10503/food-delivery-restaurant-service:1.0.1
     networks:
       - food-delivery-network
     environment:

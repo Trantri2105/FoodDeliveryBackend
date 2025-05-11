@@ -16,6 +16,7 @@ CREATE TABLE menu_items (
                             name TEXT NOT NULL,
                             description TEXT,
                             price INT NOT NULL,
+    image_url TEXT,
                             is_available BOOLEAN DEFAULT true
 );
 

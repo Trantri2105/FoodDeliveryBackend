@@ -65,9 +65,9 @@ func (r *restaurantRepository) UpdateRestaurantInfo(ctx context.Context, restaur
 }
 
 func (r *restaurantRepository) CreateMenuItem(ctx context.Context, menuItem model.MenuItem) (model.MenuItem, error) {
-	query := `INSERT INTO menu_items (restaurant_id, name, description, price, is_available)
-			VALUES ($1, $2, $3, $4, $5) RETURNING id, name, description, price, is_available`
-	row := r.db.QueryRowxContext(ctx, query, 1, menuItem.Name, menuItem.Description, menuItem.Price, menuItem.IsAvailable)
+	query := `INSERT INTO menu_items (restaurant_id, name, description, price, is_available, image_url)
+			VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, name, description, price, is_available, image_url`
+	row := r.db.QueryRowxContext(ctx, query, 1, menuItem.Name, menuItem.Description, menuItem.Price, menuItem.IsAvailable, menuItem.ImageUrl)
 	var newMenuItem model.MenuItem
 	err := row.StructScan(&newMenuItem)
 	if err != nil {
@@ -78,7 +78,7 @@ func (r *restaurantRepository) CreateMenuItem(ctx context.Context, menuItem mode
 }
 
 func (r *restaurantRepository) GetMenu(ctx context.Context) ([]model.MenuItem, error) {
-	query := `SELECT id, name, description, price, is_available FROM menu_items ORDER BY id`
+	query := `SELECT id, name, description, price, is_available, image_url FROM menu_items ORDER BY id`
 
 	rows, err := r.db.QueryxContext(ctx, query)
 	if err != nil {
@@ -117,7 +117,7 @@ func (r *restaurantRepository) UpdateMenuItem(ctx context.Context, menuItem mode
 		return model.MenuItem{}, nil
 	}
 	values = append(values, menuItem.Id)
-	query := fmt.Sprintf("UPDATE menu_items SET %s WHERE id = $%d RETURNING id, name, description, price, is_available", strings.Join(updateFields, ", "), cnt)
+	query := fmt.Sprintf("UPDATE menu_items SET %s WHERE id = $%d RETURNING id, name, description, price, is_available, image_url", strings.Join(updateFields, ", "), cnt)
 	row := r.db.QueryRowxContext(ctx, query, values...)
 	var updatedMenuItem model.MenuItem
 	err := row.StructScan(&updatedMenuItem)

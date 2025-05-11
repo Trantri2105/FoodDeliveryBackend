@@ -6,4 +6,5 @@ type MenuItem struct {
 	Description string `db:"description" json:"description"`
 	Price       int    `db:"price" json:"price"`
 	IsAvailable bool   `db:"is_available" json:"isAvailable"`
+	ImageUrl    string `db:"image_url" json:"imageUrl"`
 }

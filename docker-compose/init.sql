@@ -16,7 +16,7 @@ CREATE DATABASE restaurants;
 \c restaurants
 
 CREATE TABLE restaurants (
-                             id SERIAL PRIMARY KEY,
+                            id SERIAL PRIMARY KEY,
                              name TEXT NOT NULL,
                              description TEXT,
                              address TEXT NOT NULL,
@@ -32,6 +32,7 @@ CREATE TABLE menu_items (
                             name TEXT NOT NULL,
                             description TEXT,
                             price INT NOT NULL,
+    image_url TEXT,
                             is_available BOOLEAN DEFAULT true
 );
 
@@ -55,23 +56,12 @@ INSERT INTO restaurants (
              '23:00'
          );
 
-INSERT INTO menu_items (
-    restaurant_id,
-    name,
-    description,
-    price,
-    is_available
-) VALUES
--- Main dishes
-(1, 'Pan-Seared Salmon', 'Fresh Atlantic salmon seared to perfection, served with roasted vegetables and lemon-dill sauce.', 24000, true),
-(1, 'Seafood Linguine', 'Homemade linguine pasta tossed with shrimp, scallops, clams, and mussels in a light white wine garlic sauce.', 27000, true),
-(1, 'Mediterranean Lamb Rack', 'Herb-crusted lamb rack served with rosemary potatoes and mint jelly.', 32000, true),
-(1, 'Vegetable Paella', 'Saffron-infused rice with seasonal vegetables, artichoke hearts, and roasted peppers.', 19000, true),
-
--- Appetizers
-(1, 'Calamari Fritti', 'Lightly battered calamari served with house-made marinara sauce and lemon wedges.', 15000, true),
-(1, 'Bruschetta Sampler', 'Assortment of three bruschetta varieties: classic tomato and basil, olive tapenade, and goat cheese with honey.', 13000, false),
-(1, 'Charcuterie Board', 'Selection of premium cured meats, artisanal cheeses, olives, nuts, and house-made bread.', 22000, true);
+INSERT INTO menu_items (restaurant_id, name, description, price, is_available, image_url) VALUES
+                                                                                              (1, 'Pan-Seared Salmon', 'Fresh Atlantic salmon seared to perfection, served with roasted vegetables and lemon-dill sauce.', 24000, true, 'https://static01.nyt.com/images/2024/02/13/multimedia/LH-pan-seared-salmon-lwzt/LH-pan-seared-salmon-lwzt-mediumSquareAt3X.jpg'),
+                                                                                              (1, 'Mediterranean Pasta', 'Al dente pasta with sun-dried tomatoes, olives, feta cheese, and fresh herbs in a light olive oil sauce.', 27000, true, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrNGbsLrQaN7TyYv93p2gGhyDKcd9MzqshkA&s'),
+                                                                                              (1, 'Grilled Seafood Platter', 'An assortment of grilled shrimp, scallops, and fish fillets, served with a citrus butter sauce and seasonal vegetables.', 32000, true, 'https://eastsidebarandgrill.com.au/wp-content/uploads/2022/03/Eastside_Seafood-Platter_1200x800px.jpg'),
+                                                                                              (1, 'Lemon Herb Chicken', 'Tender chicken breast marinated in lemon and herbs, grilled to perfection and served with roasted potatoes.', 22000, true, 'https://www.foodandwine.com/thmb/t9YqzGbmH-huAbV6xitCQs0-G4s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/FAW-recipes-herb-and-lemon-roasted-chicken-hero-c4ba0aec56884683be482c47b1e1df11.jpg'),
+                                                                                              (1, 'Vegetarian Risotto', 'Creamy arborio rice cooked with wild mushrooms, asparagus, and parmesan cheese.', 20000, true, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6dgoSlQmnXyuVWdQUZU3ERZAgbXmXGtlU6g&s');
 
 CREATE DATABASE orders;
 \c orders
